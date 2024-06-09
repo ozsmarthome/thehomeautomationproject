@@ -2,6 +2,10 @@
 <html>
     <head>
         <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/>
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
       </head>
     <body>
         <h1>The Home Automation Project</h1>
@@ -10,7 +14,7 @@
         </p>
 
         Here is a sample code:
-        <code>
+        <pre><code class="language-javascript">
             mqtt:<br>
             host: 192.168.0.0<br>
             user: mqtt-user<br>
@@ -21,6 +25,6 @@
             cpu:<br>
                 type: cpu<br>
                 num_threads: 2<br>
-        </code>
+        </code></pre>
     </body>
 </html>
