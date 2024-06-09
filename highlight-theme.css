@@ -1,0 +1,44 @@
+/* Custom Theme for highlight.js */
+
+.hljs {
+    display: block;
+    padding: 0.5em;
+    background: hsl(0, 0%, 4%);
+    color: #787876;
+  }
+  .hljs-comment,
+  .hljs-quote {
+    color: #208819;
+    font-style: italic;
+  }
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-name {
+    color: #007acc;
+  }
+  .hljs-attribute,
+  .hljs-meta {
+    color: #f08d49;
+  }
+  .hljs-number,
+  .hljs-regexp,
+  .hljs-link {
+    color: #d36363;
+  }
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-subst {
+    color: #33d0cd;
+  }
+  .hljs-title,
+  .hljs-section {
+    color: #4078f2;
+  }
+  .hljs-emphasis {
+    font-style: italic;
+  }
+  .hljs-strong {
+    font-weight: bold;
+  }
