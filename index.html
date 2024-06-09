@@ -28,6 +28,17 @@
               cpu:
                 type: cpu
                 num_threads: 2
+            cameras:
+              tapo_c200:  # <------ Name the camera
+                rtmp:
+                  enabled: False # <-- RTMP should be disabled if your stream is not H264
+              
+                  ffmpeg:
+                    #output_args:
+                    #  record: preset-record-generic-audio-copy
+                    #hwaccel_args: -c:v h264_v412m2m
+                    inputs:
+                      - path: 
         </code></pre>
     </body>
 </html>
