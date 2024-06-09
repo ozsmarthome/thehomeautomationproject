@@ -8,6 +8,7 @@
         <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
         <!-- and it's easy to individually load additional languages -->
         <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
       </head>
     <body>
         <h1>The Home Automation Project</h1>
@@ -16,15 +17,15 @@
         </p>
 
         Here is a sample code:
-        <pre><code class="language-yaml">
+        <pre><code>
             mqtt:
-            host: 192.168.0.0
-            user: mqtt-user
-            password: password
+              host: 192.168.0.0
+              user: mqtt-user
+              password: password
             
             #not required if using google coral usb stick!
             detectors:
-            cpu:
+              cpu:
                 type: cpu
                 num_threads: 2
         </code></pre>
