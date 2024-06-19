@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td>
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        <!-- Back -->
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr></td>
+            </tr>
+        </table>
+        <!-- END Heading table -->
+
+        <table width="100%">
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    The below code snippets will help you setup your ESP32 Dev board in Home Assistant.
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple / basic config of WROVER CAM:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('simple-config-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="simple-config-code">
+                        <pre><code>
+                          # Example configuration entry
+                          esp32_camera:
+                            external_clock:
+                              pin: GPIO21
+                              frequency: 20MHz
+                            i2c_pins:
+                              sda: GPIO26
+                              scl: GPIO27
+                            data_pins: [GPIO4, GPIO5, GPIO18, GPIO19, GPIO36, GPIO39, GPIO34, GPIO35]
+                            vsync_pin: GPIO25
+                            href_pin: GPIO23
+                            pixel_clock_pin: GPIO22
+                          
+                            # Image settings
+                            name: Wrover Camera    
+                            max_framerate: 15 fps
+                            idle_framerate: 1.0 fps
+                            # resolution: 800x600
+                            resolution: 1024x768
+                            horizontal_mirror: false
+                            vertical_flip: false
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the details of the GPIO pins of the board:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/Raspberry Pi GPIO pins.png" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <!-- style="border: 1px solid black;" -->
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Full configuration</span>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for the full ESP32 dev config of my <code>freenove-dev-board.yaml</code>:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('advanced-config-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="advanced-config-code">
+                        <pre><code>
+                            esphome:
+                            name: freenove-dev-board
+                            friendly_name: Freenove dev board
+                          
+                          esp32:
+                            board: esp32dev
+                            framework:
+                              type: arduino
+                          
+                          # Enable logging
+                          logger:
+                          
+                          # Enable Home Assistant API
+                          api:
+                            encryption:
+                              key: "KEY"
+                          
+                          ota:
+                            password: "password"
+                          
+                          wifi:
+                            ssid: !secret wifi_ssid
+                            password: !secret wifi_password
+                            manual_ip:
+                              static_ip: 192.168.x.x
+                              gateway: 192.168.y.y
+                              subnet: 255.255.255.0
+                          
+                            # Enable fallback hotspot (captive portal) in case wifi connection fails
+                            ap:
+                              ssid: "Freenove-Dev-Board"
+                              password: "password"
+                          
+                          captive_portal:
+                              
+                          # Example configuration entry
+                          esp32_camera:
+                            external_clock:
+                              pin: GPIO21
+                              frequency: 20MHz
+                            i2c_pins:
+                              sda: GPIO26
+                              scl: GPIO27
+                            data_pins: [GPIO4, GPIO5, GPIO18, GPIO19, GPIO36, GPIO39, GPIO34, GPIO35]
+                            vsync_pin: GPIO25
+                            href_pin: GPIO23
+                            pixel_clock_pin: GPIO22
+                          
+                            # Image settings
+                            name: Wrover Camera    
+                            max_framerate: 15 fps
+                            idle_framerate: 1.0 fps
+                            # resolution: 800x600
+                            resolution: 1024x768
+                            horizontal_mirror: false
+                            vertical_flip: false
+                            # ...                          
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br>Refer the video linked below for full step-by-step configuration
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/9SgPjVNhJu8">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>

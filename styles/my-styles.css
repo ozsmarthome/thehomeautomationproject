@@ -1,5 +1,5 @@
-/* @import "theme-blue.css"; */
-@import "theme-beige.css";
+@import "../themes/theme-blue.css";
+/* @import "../themes/theme-beige.css"; */
 
 /* Reset default browser styles */
 html, body, div, span, applet, object, iframe,

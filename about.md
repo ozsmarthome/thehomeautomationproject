@@ -1,0 +1,1 @@
+Note: 'icon-pack' folder needs to be at same level as the 'my-styles.css'
