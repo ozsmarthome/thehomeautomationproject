@@ -1,44 +1,112 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- <link rel="stylesheet" href="styles.css"> -->
+        <link rel="stylesheet" href="banner-grid.css">
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="top-3-video-grid.css">
         <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
         <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
-        <link rel="stylesheet" href="highlight-theme.css">
-        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
-        <!-- and it's easy to individually load additional languages -->
-        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
-        <script>hljs.highlightAll();</script>
       </head>
     <body>
-        <h1>The Home Automation Project</h1>
-        <p>
-            Welcome to my website. Here I share my code snippets linked to my Youtube videos on Home Automation, including Home Assistant and Hubitat among others
-        </p>
+        <!-- The CSS grid that makes up the entirety of the hero image/banner image area -->
+        <section class="top-banner-section">
+            <!-- The CSS grid area that displays the image (layer 1) -->
+            <div class="banner-image-div">
+                <img class="banner-image" src="Banner-Small-white.svg" alt="Banner Image" />
+            </div>
+            <div class="banner-overlay-div"></div>
+        </section>
 
-        Here is a sample code:
-        <pre><code>
-            mqtt:
-              host: 192.168.0.0
-              user: mqtt-user
-              password: password
-            
-            #not required if using google coral usb stick!
-            detectors:
-              cpu:
-                type: cpu
-                num_threads: 2
-            cameras:
-              tapo_c200:  # <------ Name the camera
-                rtmp:
-                  enabled: False # <-- RTMP should be disabled if your stream is not H264
-              
-                  ffmpeg:
-                    #output_args:
-                    #  record: preset-record-generic-audio-copy
-                    #hwaccel_args: -c:v h264_v412m2m
-                    inputs:
-                      - path: 
-        </code></pre>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td width="10px">
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr><td colspan="2" width="100%">  </td></tr>
+            <tr><td></td>
+                <td>
+                <!-- <p> -->
+                    Welcome to my website. I create Youtube videos on Home automation and like to share some tips and tricks along the way :) 
+                    <p>Here I share my code snippets linked to my Youtube videos on Home Automation, including Home Assistant 
+                    and Hubitat among others.</p>
+                <!-- </p> -->
+                </td>
+            </tr>
+            <tr><td colspan="2" height="20px"></td></tr>
+            <tr><td></td>
+                <td>
+                    <span class="bolded">Please refer the following projects for any information you may need on Home Automation</span>
+                </td>
+            </tr>
+        
+            <tr>
+                <td colspan="2">
+                    <section class="top-3-vid-section">
+                        <div class="top-3-vid-image-div">
+                            <img class="vid" src="Cover-images/Vid1-Cover.jpg" alt="Video Image" />
+                        </div>
+                        <div class="more1">
+                            <span class="more-text">
+                                <!-- <p class="more-h1-text">Remain relevant in today's technology-driven economy</p> -->
+                                <!-- <p class="more-body-text">Frigate setup in Home Assistant</p> -->
+                                <p class="more-btn"><a class="more-btn-item" href="Frigate setup.html">View project &#8594;</a></p>
+                            </span>
+                        </div>
+                        <div class="vid">
+                            <img class="vid" src="Cover-images/Vid2-Cover.jpg" alt="Video Image" />
+                        </div>
+                        <div class="more2">
+                            <span class="more-text">
+                                <!-- <p class="more-h1-text">Remain relevant in today's technology-driven economy</p> -->
+                                <!-- <p class="more-body-text">ESP32 setup in Home Assistant</p> -->
+                                <p class="more-btn"><a class="more-btn-item" href="Frigate setup.html">View project &#8594;</a></p>
+                            </span>
+                        </div>
+                        <div class="vid">
+                            <img class="vid" src="Cover-images/Vid3-Cover.jpg" alt="Video Image" />
+                        </div>
+                        <div class="more3">
+                            <span class="more-text">
+                                <!-- <p class="more-h1-text">Remain relevant in today's technology-driven economy</p> -->
+                                <!-- <p class="more-body-text">Home Assistant installation on Raspberry PI</p> -->
+                                <p class="more-btn"><a class="more-btn-item" href="Frigate setup.html">View project &#8594;</a></p>
+                                <br><br>
+                            </span>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+    
+            <tr><td colspan="2"><br><br>
+                    <!-- Add standard footer -->
+                    <section class="contact-details">
+
+                        <div class="contact-details-text">Contact me:&nbsp;</div>
+                        <div class="contact-details-icons">
+                            <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                                <img class="contact-details-icon-email" alt="Email"/>
+                            </a>
+                        </div>
+                        <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                        <div class="contact-details-text">My channel:&nbsp;</div>
+                        <div class="contact-details-icons">
+                            <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                                <img class="contact-details-icon-channel" alt="Youtube"/>
+                            </a>
+                        </div>
+
+                    </section>
+                    <!-- End standard footer -->
+                    </td>
+                 </tr>
+            </table>
     </body>
 </html>

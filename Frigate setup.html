@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td>
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        <!-- Back -->
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr></td>
+            </tr>
+        </table>
+        <!-- END Heading table -->
+
+        <table width="100%">
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    The below code snippets will help you setup your 
+                    <a href="https://github.com/blakeblackshear/frigate-hass-addons" 
+                    alt="https://github.com/blakeblackshear/frigate-hass-addons" target="_blank">Frigate Add-on</a> 
+                    <svg width="24px" height="24px" viewBox="0 0 24 24" style="cursor:pointer">
+                        <g stroke-width="2.1" stroke="#7b7979" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="17 13.5 17 19.5 5 19.5 5 7.5 11 7.5"></polyline>
+                            <path d="M14,4.5 L20,4.5 L20,10.5 M20,4.5 L11,13.5"></path>
+                        </g>
+                    </svg>
+                    in Home Assistant.
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <!-- style="border: 1px solid black;" -->
+                <td colspan="2" height="30px">
+                    <span class="topic-heading">Simple configuration</span>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple / basic config of <code>frigate.yml</code>:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('simple-config-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="simple-config-code">
+                        <pre><code>
+                            mqtt:
+                              host: ip # example, 192.168.x.x
+                              user: mqtt-user
+                              password: password
+                            
+                            #not required if using google coral usb stick!
+                            detectors:
+                            cpu:
+                                type: cpu
+                                num_threads: 2
+            
+                            cameras:
+                            tapo_c200:  # <------ Name the camera
+                                rtmp:
+                                enabled: False # <-- RTMP should be disabled if your stream is not H264
+                            
+                                ffmpeg:
+                                    #output_args:
+                                    #  record: preset-record-generic-audio-copy
+                                    #hwaccel_args: -c:v h264_v412m2m
+                                    inputs:
+                                    - path: rtsp://username:password@ip:554/stream1
+                                      # special character substitution with ASCII is required above, example,
+                                      # if you have the character '@' then replace with '%40' in the string.
+                                      # search online for other such equivalent ASCII charset
+                                      # refer here: https://www.w3schools.com/tags/ref_urlencode.ASP
+                                    roles:
+                                      - record
+                                      - detect
+                                  
+                              #-------------------------------------------
+                              # Optional: Detect configuration
+                              detect:
+                                width:  640 # <---- update for your camera's resolution
+                                height:  360 # <---- update for your camera's resolution
+                                fps: 5
+                                enabled: true
+                                stationary:
+                                  interval: 20
+                                  threshold: 50
+                                
+                              #---------------------------------------------
+                              objects:
+                                track:
+                                  - person
+                                filters:
+                                  person:
+                                    # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+                                    min_area: 5000
+                                    # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+                                    # max_area: 100000
+                                    min_score: 0.5
+                                    threshold: 0.6
+                              
+                              #-------------------------------------------
+                              # Optional: Record configuration
+                              record:
+                                enabled: True
+                                retain:
+                                  days: 7
+                                  mode: active_objects #motion
+                                events:
+                                  pre_capture: 10
+                                  post_capture: 10
+                                  # Optional: Objects to save recordings for. (default: all tracked objects)
+                                  objects:
+                                    - person
+                                  retain:
+                                    default: 14
+                                    mode: active_objects
+                                    # Optional: Per object retention days
+                                    # objects:
+                                    #   person: 7
+                          
+                              #-------------------------------------------
+                              # Optional: Configuration for the jpg snapshots written to the clips directory for each event
+                              snapshots:
+                                enabled: True
+                                timestamp: True
+                                bounding_box: True
+                                crop: False
+                                retain:
+                                  default: 7
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the details of the <code>path</code> string:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="Tapo camera settings.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <!-- style="border: 1px solid black;" -->
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Advanced configuration</span>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for an advanced config of <code>frigate.yml</code> for cameras with multiple streams:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('advanced-config-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="advanced-config-code">
+                        <pre><code>
+                          mqtt:
+                            host: ip # example, 192.168.x.x
+                            user: mqtt-user
+                            password: password
+                          
+                          #not required if using google coral usb stick!
+                          detectors:
+                            cpu:
+                              type: cpu
+                              num_threads: 2
+                          
+                          go2rtc:
+                            streams:
+                              cam1: 
+                                - rtsp://username:password@ip:554/stream1
+                              cam1_sub: 
+                                - rtsp://username:password@ip:554/stream2
+                          
+                          cameras:
+                            cam1:  # <------ Name the camera
+                              rtmp:
+                                enabled: False # <-- RTMP should be disabled if your stream is not H264
+                          
+                              ffmpeg:
+                                #output_args:
+                                #  record: preset-record-generic-audio-copy
+                                #hwaccel_args: -c:v h264_v412m2m
+                                inputs:
+                                  - path: rtsp://127.0.0.1:8554/cam1
+                                    input_args: preset-rtsp-restream
+                                    roles:
+                                      - record
+                                  - path: rtsp://127.0.0.1:8554/cam1_sub # <--- the name here must match the name of the camera_sub in restream
+                                    input_args: preset-rtsp-restream 
+                                    roles:
+                                      - detect
+                              live:
+                                  stream_name: cam1_sub
+                                  
+                              #-------------------------------------------
+                              # Optional: Detect configuration
+                              detect:
+                                width:  640 # <---- update for your camera's resolution
+                                height:  360 # <---- update for your camera's resolution
+                                fps: 5
+                                enabled: true
+                                stationary:
+                                  interval: 20
+                                  threshold: 50
+                                
+                              #---------------------------------------------
+                              objects:
+                                track:
+                                  - person
+                                filters:
+                                  person:
+                                    # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+                                    min_area: 5000
+                                    # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+                                    # max_area: 100000
+                                    min_score: 0.5
+                                    threshold: 0.6
+                              
+                              #-------------------------------------------
+                              # Optional: Record configuration
+                              record:
+                                enabled: True
+                                retain:
+                                  days: 7
+                                  mode: active_objects #motion
+                                events:
+                                  pre_capture: 10
+                                  post_capture: 10
+                                  # Optional: Objects to save recordings for. (default: all tracked objects)
+                                  objects:
+                                    - person
+                                  required_zones:
+                                    - zone_0
+                                  retain:
+                                    default: 14
+                                    mode: active_objects
+                                    # Optional: Per object retention days
+                                    # objects:
+                                    #   person: 7
+                          
+                              #-------------------------------------------
+                              # Optional: Configuration for the jpg snapshots written to the clips directory for each event
+                              snapshots:
+                                enabled: True
+                                timestamp: True
+                                bounding_box: True
+                                crop: False
+                                retain:
+                                  default: 7
+                                required_zones:
+                                    - zone_0
+                              
+                              #motion mask for timestamp
+                              motion:
+                                  mask:
+                                    - 0,0,0,23,228,21,227,0
+                          
+                              #optional zone to detect person
+                              zones:
+                                zone_0:
+                                  coordinates: 168,360,436,360,434,162,166,147
+                                  objects:
+                                    - person                          
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br>Refer the video linked below for full step-by-step configuration
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/9SgPjVNhJu8">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3" align="center"><br><br>
+                    <!-- Add standard footer -->
+                    <section class="contact-details">
+
+                        <div class="contact-details-text">Contact me:&nbsp;</div>
+                        <div class="contact-details-icons">
+                            <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                                <img class="contact-details-icon-email" alt="Email"/>
+                            </a>
+                        </div>
+                        <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                        <div class="contact-details-text">My channel:&nbsp;</div>
+                        <div class="contact-details-icons">
+                            <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                                <img class="contact-details-icon-channel" alt="Youtube"/>
+                            </a>
+                        </div>
+
+                    </section>
+                    <!-- End standard footer -->
+                </td>
+            </tr>
+
+        </table>
+         
+    </body>
+</html>

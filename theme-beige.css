@@ -1,0 +1,32 @@
+:root {
+
+    
+    --primary-banner-color-rgb: 62,54,54;
+    --secondary-banner-color-rgb: 250,246,246;
+
+    --primary-bg-color: #faf6f6;
+    --primary-fg-color: #3e3636;
+    
+    --secondary-bg-color: #000000;
+    --secondary-fg-color: #ebe7e7;
+
+    --scrollbar-color: #7b7979;
+
+    --shadow-color: #7b7979;
+
+    --footer-text-color: #7b7979;
+
+    --header-color: #333;
+    --header-h1-color: hsl(240, 1%, 19%);
+    --header-h2-color: hsl(240, 10%, 10%);
+
+    --code-bg-color: #3e3636;
+    --code-text-color: #e9ec3a;
+
+    --copy-btn-bg-color: #f2efef;
+    --copy-btn-fg-color: #0f0f0f;
+
+    --img-ftr-yt-src: url('icon-pack/theme-beige/youtube-icon-beige.png');
+    --img-ftr-em-src: url('icon-pack/theme-beige/email-icon-beige.png');
+
+}

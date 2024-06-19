@@ -1,0 +1,117 @@
+.top-3-vid-section {
+    display: grid;
+    max-width: 96%;
+    margin:auto; /* allows to center in page! */
+    justify-self: center;
+    grid-template-columns: 1fr 1fr 1fr; /* stretch to the full frame */
+    grid-template-rows: 250px 1px; /* 350 pixels tall */
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    align-content: center;
+    justify-content: center;
+    grid-gap: 10px;
+    padding: 10px 10px 1px 10px;
+    background-color: #000000bf;
+    color: #444;
+    border: 2px solid var(--secondary-fg-color);
+    vertical-align: middle;
+    box-shadow: 10px 15px 15px var(--shadow-color);
+    /* rgb(88, 168, 222); */
+    /* align-content: space-evenly; */
+    grid-template-areas: 
+        "vid vid vid"
+        /* "more1 more2 more3" */
+  }
+
+  .vid {
+    display: grid;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    /* background: black; */
+    background: linear-gradient(
+        60deg,
+        rgba(17, 158, 197, 0.778) 30%,
+        rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .more1 {
+    display: grid;
+    align-items:center;
+    justify-content: center;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -45px;
+    grid-area: 2/1/2/1;
+  }
+  .more2 {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -45px;
+    grid-area: 2/2/2/2;
+  }
+  .more3 {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: -45px;
+    grid-area: 2/3/2/3;
+  }
+
+  .more-h1-text {
+    /* font can get larger, but no smaller than 10 points. */
+    font-size: calc(10pt + 0.15vw);
+    letter-spacing: 0.05em;
+    font-weight: bolder;
+    text-transform: uppercase;
+    color: white;
+  }
+  
+  .more-body-text {
+    /* font can get larger, but no smaller than 10 points. */
+    font-size: calc(10pt + 0.15vw);
+    margin-top: 0.5em;
+    color: white;
+    text-decoration: none;
+  
+    &:hover {
+      color: white;
+    }
+    &:visited {
+      color: white;
+    }
+    &:active {
+      color: white;
+    }
+  }
+  
+  .more-btn {
+    margin-top: 1em;
+  }
+  
+  .more-btn-item {
+    font-size: calc(8pt + 0.15vw); /* responsive size, but keep a minimum. */
+    padding-top: calc(0.5em + 0.08vw);
+    padding-bottom: calc(0.5em + 0.08vw);
+    padding-left: calc(0.5em + 0.08vw);
+    padding-right: calc(0.5em + 0.08vw);
+    color: var(--primary-fg-color); /*rgb(14, 14, 15);*/
+    background-color: var(--shadow-color); /*rgb(56, 179, 224);*/
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 1px solid rgb(34, 34, 34);
+  
+    &:link {
+      text-decoration: none;
+    }
+    &:visited {
+      text-decoration: none;
+    }
+  }
