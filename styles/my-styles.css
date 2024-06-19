@@ -254,6 +254,7 @@ code {
     max-width: 96%;
     margin:auto; /* allows to center in page! */
     overflow-y: scroll;
+    overflow-x: hidden;
     justify-self: center;
     grid-template-columns: 1fr; /* stretch to the full frame */
     grid-template-rows: 550px;
