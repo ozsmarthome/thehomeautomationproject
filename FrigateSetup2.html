@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td>
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        <!-- Back -->
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr></td>
+            </tr>
+        </table>
+        <!-- END Heading table -->
+
+        <table width="100%">
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    The below code snippets will help you setup automation for Frigate notification in Home Assistant.
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple <code>yml</code> automation script:
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('simple-config-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="simple-config-code">
+                        <pre><code>
+                            alias: "FRIGATE: Notify person detection"
+                            description: "Test script for frigate notifications"
+                            trigger:
+                              - platform: mqtt
+                                topic: frigate/events
+                            condition:
+                              - condition: template
+                                value_template: "{{ trigger.payload_json['after']['label'] == 'person' }}"
+                              - condition: template
+                                value_template: "{{ 'primary_zone' in trigger.payload_json['after']['entered_zones'] }}"
+                            action:
+                              - service: notify.mobile_app_vivo_1805
+                                data_template:
+                                  message: A {{trigger.payload_json["after"]["label"]}} was detected.
+                                  title: Frigate
+                                  data:
+                                    image: >-
+                                      http://HA_URL:8123/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg?format=android
+                                    tag: "{{trigger.payload_json[\"after\"][\"id\"]}}"
+                                    when: "{{trigger.payload_json[\"after\"][\"start_time\"]|int}}"
+                                    actions:
+                                      - action: URI
+                                        title: Open Image
+                                        uri: >-
+                                          http://HA_URL:8123/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg?format=android
+                                enabled: true
+                            mode: single                            
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br>Refer the video linked below for the full step-by-step automation setup in Home Assistant
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/gA67NCcTwms">
+                    </iframe>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br>Refer <span class="bolded">Part 1</span> of the video linked below for full step-by-step configuration of the Frigate Add-on server
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/2ePO73nRZGU">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>
