@@ -1,0 +1,27 @@
+alias: "FRIGATE: Notify person detection"
+description: "Test script for frigate notifications"
+trigger:
+  - platform: mqtt
+    topic: frigate/events
+condition:
+  - condition: template
+    value_template: "{{ trigger.payload_json['after']['label'] == 'person' }}"
+  - condition: template
+    value_template: "{{ 'primary_zone' in trigger.payload_json['after']['entered_zones'] }}"
+action:
+  - service: notify.mobile_app_vivo_1805
+    data_template:
+      message: A {{trigger.payload_json["after"]["label"]}} was detected.
+      title: Frigate
+      data:
+        image: >-
+          http://HA_URL:8123/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg?format=android
+        tag: "{{trigger.payload_json[\"after\"][\"id\"]}}"
+        when: "{{trigger.payload_json[\"after\"][\"start_time\"]|int}}"
+        actions:
+          - action: URI
+            title: Open Image
+            uri: >-
+              http://HA_URL:8123/api/frigate/notifications/{{trigger.payload_json["after"]["id"]}}/thumbnail.jpg?format=android
+    enabled: true
+mode: single   

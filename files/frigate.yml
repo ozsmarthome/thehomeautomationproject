@@ -1,0 +1,108 @@
+mqtt:
+  host: ip # example, 192.168.x.x
+  user: mqtt-user
+  password: password
+
+#not required if using google coral usb stick!
+detectors:
+  cpu:
+    type: cpu
+    num_threads: 2
+
+go2rtc:
+  streams:
+    cam1: 
+      - rtsp://username:password@ip:554/stream1
+    cam1_sub: 
+      - rtsp://username:password@ip:554/stream2
+
+cameras:
+  cam1:  # <------ Name the camera
+    rtmp:
+      enabled: False # <-- RTMP should be disabled if your stream is not H264
+
+    ffmpeg:
+      #output_args:
+      #  record: preset-record-generic-audio-copy
+      #hwaccel_args: -c:v h264_v412m2m
+      inputs:
+        - path: rtsp://127.0.0.1:8554/cam1
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/cam1_sub # <--- the name here must match the name of the camera_sub in restream
+          input_args: preset-rtsp-restream 
+          roles:
+            - detect
+    live:
+        stream_name: cam1_sub
+        
+    #-------------------------------------------
+    # Optional: Detect configuration
+    detect:
+      width:  640 # <---- update for your camera's resolution
+      height:  360 # <---- update for your camera's resolution
+      fps: 5
+      enabled: true
+      stationary:
+        interval: 20
+        threshold: 50
+      
+    #---------------------------------------------
+    objects:
+      track:
+        - person
+      filters:
+        person:
+          # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+          min_area: 5000
+          # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+          # max_area: 100000
+          min_score: 0.5
+          threshold: 0.6
+    
+    #-------------------------------------------
+    # Optional: Record configuration
+    record:
+      enabled: True
+      retain:
+        days: 7
+        mode: active_objects #motion
+      events:
+        pre_capture: 10
+        post_capture: 10
+        # Optional: Objects to save recordings for. (default: all tracked objects)
+        objects:
+          - person
+        required_zones:
+          - zone_0
+        retain:
+          default: 14
+          mode: active_objects
+          # Optional: Per object retention days
+          # objects:
+          #   person: 7
+
+    #-------------------------------------------
+    # Optional: Configuration for the jpg snapshots written to the clips directory for each event
+    snapshots:
+      enabled: True
+      timestamp: True
+      bounding_box: True
+      crop: False
+      retain:
+        default: 7
+      required_zones:
+          - zone_0
+    
+    #motion mask for timestamp
+    motion:
+        mask:
+          - 0,0,0,23,228,21,227,0
+
+    #optional zone to detect person
+    zones:
+      zone_0:
+        coordinates: 168,360,436,360,434,162,166,147
+        objects:
+          - person
