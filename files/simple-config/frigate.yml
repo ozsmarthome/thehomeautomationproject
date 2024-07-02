@@ -1,0 +1,83 @@
+mqtt:
+  host: ip # example, 192.168.x.x
+  user: mqtt-user
+  password: password
+
+#not required if using google coral usb stick!
+detectors:
+cpu:
+    type: cpu
+    num_threads: 2
+
+cameras:
+tapo_c200:  # <------ Name the camera
+    rtmp:
+    enabled: False # <-- RTMP should be disabled if your stream is not H264
+
+    ffmpeg:
+        #output_args:
+        #  record: preset-record-generic-audio-copy
+        #hwaccel_args: -c:v h264_v412m2m
+        inputs:
+        - path: rtsp://username:password@ip:554/stream1
+          # special character substitution with ASCII is required above, example,
+          # if you have the character '@' then replace with '%40' in the string.
+          # search online for other such equivalent ASCII charset
+          # refer here: https://www.w3schools.com/tags/ref_urlencode.ASP
+        roles:
+          - record
+          - detect
+      
+  #-------------------------------------------
+  # Optional: Detect configuration
+  detect:
+    width:  640 # <---- update for your camera's resolution
+    height:  360 # <---- update for your camera's resolution
+    fps: 5
+    enabled: true
+    stationary:
+      interval: 20
+      threshold: 50
+    
+  #---------------------------------------------
+  objects:
+    track:
+      - person
+    filters:
+      person:
+        # Optional: minimum width*height of the bounding box for the detected object (default: 0)
+        min_area: 5000
+        # Optional: maximum width*height of the bounding box for the detected object (default: 24000000)
+        # max_area: 100000
+        min_score: 0.5
+        threshold: 0.6
+  
+  #-------------------------------------------
+  # Optional: Record configuration
+  record:
+    enabled: True
+    retain:
+      days: 7
+      mode: active_objects #motion
+    events:
+      pre_capture: 10
+      post_capture: 10
+      # Optional: Objects to save recordings for. (default: all tracked objects)
+      objects:
+        - person
+      retain:
+        default: 14
+        mode: active_objects
+        # Optional: Per object retention days
+        # objects:
+        #   person: 7
+
+  #-------------------------------------------
+  # Optional: Configuration for the jpg snapshots written to the clips directory for each event
+  snapshots:
+    enabled: True
+    timestamp: True
+    bounding_box: True
+    crop: False
+    retain:
+      default: 7
