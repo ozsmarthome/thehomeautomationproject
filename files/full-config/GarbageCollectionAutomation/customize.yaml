@@ -1,0 +1,4 @@
+sensor.bin_collection_green:
+  entity_picture: /local/my-images/green_bin.png
+sensor.bin_collection_recycle:
+  entity_picture: /local/my-images/blue_bin.png

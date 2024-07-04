@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td>
+                    <!-- <a href="index.html"><img height="50px" src="/styles/icon-pack/home-button-icon.png" alt="Home"> </img></a> -->
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        <!-- Back -->
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr>
+        </table>
+        <!-- END Heading table -->
+
+        <table width="100%">
+            <tr><td width="30px"></td>
+                <td colspan="2" height="60px">
+                    <span class="italica">The below code snippets will help you setup a garbage collection schedule based automation in Home Assistant.</span>
+                </td>
+            </tr>
+            
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a calendar based reminder automation script for bin / garbage collection:
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('bin-reminder-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/GarbageCollectionAutomation/recycle-bin-reminder-automation.yaml" download target="_blank">
+                        Click this link to download recycle bin reminder automation yaml file</a></mark></td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-medium" id="bin-reminder-code">
+                        <pre><code>
+                            alias: "NOTIFY: Recycle bin reminder"
+                            description: ""
+                            trigger:
+                            - platform: time
+                                at: "08:00:00"
+                            condition:
+                            - condition: state
+                                entity_id: sensor.bin_collection_recycle
+                                state: Today
+                            action:
+                            - service: notify.mobile_app_vivo_1805
+                                metadata: {}
+                                data:
+                                message: Recycle bin collection today!
+                                title: Bin reminder
+                            mode: single             
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr><td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/GarbageCollectionAutomation/bin-reminder-template-sensors.yaml" download target="_blank">
+                    Click this link to download bin reminder template sensors yaml file
+                </a></mark></td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('bin-reminder-sensor')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="bin-reminder-sensor">
+                        <pre><code>
+                            - sensor:
+                                #--------- Garbage collection --------------------
+                                - name: Bin Collection - Green
+                                unique_id: bin_collection_green
+                                state: >
+                                    {% set t = now() %}
+                                    {% set midnight = today_at() %}
+                                    {% set event = state_attr('calendar.green_bin_collection_calendar', 'start_time') | as_datetime | as_local %}
+                                    {% set delta = event - midnight %}
+                                    {% if delta.days == 0 %}
+                                    Today
+                                    {% elif delta.days == 1 %}
+                                    Tomorrow
+                                    {% else %}
+                                    In {{ delta.days }} Days
+                                    {% endif %}
+
+                                - name: Bin Collection - Recycle
+                                unique_id: bin_collection_recycle
+                                state: >
+                                    {% set t = now() %}
+                                    {% set midnight = today_at() %}
+                                    {% set event = state_attr('calendar.recycle_bin_collection_calendar', 'start_time') | as_datetime | as_local %}
+                                    {% set delta = event - midnight %}
+                                    {% if delta.days == 0 %}
+                                    Today
+                                    {% elif delta.days == 1 %}
+                                    Tomorrow
+                                    {% else %}
+                                    In {{ delta.days }} Days
+                                    {% endif %}
+
+                            #---------------------------------------             
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/GarbageCollectionAutomation/bin-reminder-card.yaml" download target="_blank">
+                    Click this link to download bin reminder card yaml file</a></mark></td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('bin-reminder-card')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-small" id="bin-reminder-card">
+                        <pre><code>
+                            type: entities
+                            entities:
+                                - entity: sensor.bin_collection_recycle
+                                  name: Dry waste collection
+                                - entity: sensor.bin_collection_green
+                                  name: Green waste collection         
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/GarbageCollectionAutomation/customize.yaml" download target="_blank">
+                    Click this link to download customize.yaml file</a></mark></td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('customize-yaml')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-small" id="customize-yaml">
+                        <pre><code>
+                            sensor.bin_collection_green:
+                                entity_picture: /local/my-images/green_bin.png
+                            sensor.bin_collection_recycle:
+                                entity_picture: /local/my-images/blue_bin.png
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/GarbageCollectionAutomation/configuration.yaml" download target="_blank">
+                    Click this link to download configuration.yaml file</a></mark></td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('config-yaml')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-medium" id="config-yaml">
+                        <pre><code>
+                            # Loads default set of integrations. Do not remove.
+                            default_config:
+
+                            homeassistant:
+                              customize: !include customize.yaml
+
+                            # Load frontend themes from the themes folder
+                            frontend:
+                              themes: !include_dir_merge_named themes
+
+                            automation: !include automations.yaml
+                            script: !include scripts.yaml
+                            scene: !include scenes.yaml
+
+                            template: !include my-sensors/my-template-sensors.yaml
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- ------------------ Video link ------------------------->
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center" height="60px">
+                    <br><span class=bolded>Refer the video linked below for the full step-by-step automation setup in Home Assistant</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/-reha9LEoNQ">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>

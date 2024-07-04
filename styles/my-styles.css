@@ -168,6 +168,16 @@ code {
     font-weight: bold;
 }
 
+.italica {
+    font-style: italic;
+    color: rgb(110, 112, 111);
+}
+
+mark {
+    background-color: #E4E5E4;
+    color: rgb(13, 15, 14);
+}
+
 .topic-heading {
     font-size: 1.5em;
     color: var(--header-h2-color) !important;
@@ -270,6 +280,48 @@ code {
     /* align-content: space-evenly; */
   }
 
+  .code-container-medium {
+    display: grid;
+    max-width: 96%;
+    margin:auto; /* allows to center in page! */
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-self: center;
+    grid-template-columns: 1fr; /* stretch to the full frame */
+    grid-template-rows: 400px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    align-content: center;
+    justify-content: center;
+    grid-gap: 10px;
+    padding: 10px 10px 1px 10px;
+    /* border: 2px solid rgb(53, 156, 200); */
+    vertical-align: middle;
+    /* box-shadow: 10px 15px 15px rgb(88, 168, 222); */
+    /* align-content: space-evenly; */
+  }
+
+  .code-container-small {
+    display: grid;
+    max-width: 96%;
+    margin:auto; /* allows to center in page! */
+    overflow-y: scroll;
+    overflow-x: hidden;
+    justify-self: center;
+    grid-template-columns: 1fr; /* stretch to the full frame */
+    grid-template-rows: 200px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    align-content: center;
+    justify-content: center;
+    grid-gap: 10px;
+    padding: 10px 10px 1px 10px;
+    /* border: 2px solid rgb(53, 156, 200); */
+    vertical-align: middle;
+    /* box-shadow: 10px 15px 15px rgb(88, 168, 222); */
+    /* align-content: space-evenly; */
+  }
+
   .copy-button {
     color: var(--copy-btn-fg-color);
     background-color: var(--copy-btn-bg-color);
@@ -294,6 +346,19 @@ code {
     border-style: inset;
     border-width: 1px;
     border-color:var(--secondary-bg-color);
+}
+
+hr.gradient {
+  height: 3px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(13, 8, 96, 1) 0%,
+    rgba(9, 9, 121, 1) 21%,
+    rgba(6, 84, 170, 1) 51%,
+    rgba(0, 255, 113, 1) 100%
+  );
 }
 
 .image-section {

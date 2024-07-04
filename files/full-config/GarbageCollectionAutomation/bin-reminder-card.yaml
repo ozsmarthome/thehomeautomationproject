@@ -1,0 +1,6 @@
+type: entities
+entities:
+  - entity: sensor.bin_collection_recycle
+    name: Dry waste collection
+  - entity: sensor.bin_collection_green
+    name: Green waste collection

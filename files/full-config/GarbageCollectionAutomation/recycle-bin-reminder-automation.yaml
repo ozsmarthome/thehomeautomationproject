@@ -1,0 +1,16 @@
+alias: "NOTIFY: Recycle bin reminder"
+description: ""
+trigger:
+- platform: time
+    at: "08:00:00"
+condition:
+- condition: state
+    entity_id: sensor.bin_collection_recycle
+    state: Today
+action:
+- service: notify.mobile_app_vivo_1805
+    metadata: {}
+    data:
+    message: Recycle bin collection today!
+    title: Bin reminder
+mode: single

@@ -1,0 +1,33 @@
+- sensor:
+  #--------- Garbage collection --------------------
+  - name: Bin Collection - Green
+    unique_id: bin_collection_green
+    state: >
+        {% set t = now() %}
+        {% set midnight = today_at() %}
+        {% set event = state_attr('calendar.green_bin_collection_calendar', 'start_time') | as_datetime | as_local %}
+        {% set delta = event - midnight %}
+        {% if delta.days == 0 %}
+        Today
+        {% elif delta.days == 1 %}
+        Tomorrow
+        {% else %}
+        In {{ delta.days }} Days
+        {% endif %}
+
+  - name: Bin Collection - Recycle
+    unique_id: bin_collection_recycle
+    state: >
+        {% set t = now() %}
+        {% set midnight = today_at() %}
+        {% set event = state_attr('calendar.recycle_bin_collection_calendar', 'start_time') | as_datetime | as_local %}
+        {% set delta = event - midnight %}
+        {% if delta.days == 0 %}
+        Today
+        {% elif delta.days == 1 %}
+        Tomorrow
+        {% else %}
+        In {{ delta.days }} Days
+        {% endif %}
+        
+  #---------------------------------------    
