@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td>
+                    <!-- <a href="index.html"><img height="50px" src="/styles/icon-pack/home-button-icon.png" alt="Home"> </img></a> -->
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        <!-- Back -->
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr>
+        </table>
+        <!-- END Heading table -->
+
+        <table width="100%">
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    <span class="italica">The below code snippets will help you setup NFC tags based automations in Home Assistant.</span>
+                </td>
+                <td height="60px"></td>
+            </tr>
+
+            <!-- <tr>
+                <td align="center" colspan="3">
+                    <span class="bolded">NFC Tags automation</span>
+                </td>
+            </tr> -->
+            
+            <!-- ------------------ ANDROID ------------------------->
+            <tr><td></td>
+                <td align="left" colspan="2">
+                    <span class="bolded"><u>Android phone automation</u></span>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple NFC tags based automation script for <span class=bolded>Android phones</span>:
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('nfc-tags-code-android')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/NFCTags/nfc-tags-android-automation.yaml" download target="_blank">
+                        Click this link to download NFC tags automation yaml file for Android</a></mark></td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-medium" id="nfc-tags-code-android">
+                        <pre><code>
+                            alias: "NFC: From webhook"
+                            description: ""
+                            trigger:
+                              - platform: webhook
+                                allowed_methods:
+                                  - GET
+                                local_only: true
+                                webhook_id: "-zCH00m2PHOAnNGWipJiKux9R"
+                            condition: []
+                            action:
+                              - service: light.toggle
+                                metadata: {}
+                                data: {}
+                                target:
+                                  device_id: z5d19fd60e2e2f9a81c92db7f123456
+                            mode: single
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the steps in <span class="bolded"> NFC Tools Free </span> App:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-basic-screen-1.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-basic-screen-2.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-basic-screen-3.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the steps in <span class="bolded"> NFC Tools Pro </span> App:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-pro-screen-1.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-pro-screen-2.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the automations settings in HA for webhook:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/android-settings-screen.svg" alt="Path string"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+
+            <!-- ------------------ iPHONE ------------------------->
+            <tr><td height="60px"></td></tr>
+            <tr><td></td>
+                <td align="left" colspan="2">
+                    <span class="bolded"><u>iPhone automation</u></span>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple NFC tags based automation script for <span class=bolded>iPhones</span>:
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('nfc-tags-code-iphone')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td align="left"><mark>>> Link to download the sample yaml file: 
+                    <a href="files/full-config/NFCTags/nfc-tags-iphone-automation.yaml" download target="_blank">
+                        Click this link to download NFC tags automation yaml file for iPhone</a></mark></td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-medium" id="nfc-tags-code-iphone">
+                        <pre><code>
+                            alias: "NFC: From webhook"
+                            description: ""
+                            trigger:
+                              - platform: event
+                                event_type: office_nfc_tag
+                            condition: []
+                            action:
+                              - service: light.toggle
+                                metadata: {}
+                                data: {}
+                                target:
+                                  device_id: z5d19fd60e2e2f9a81c92db7f123456
+                            mode: single
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td></td>
+                <td>
+                    <br>The following illustrates the steps in <span class="bolded"> iPhone Shortcuts </span> App:
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/iphone-screen-1.svg" alt="iphone-screen-1"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/iphone-screen-2.svg" alt="iphone-screen-2"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <section class="image-section">
+                        <div class="pic-div">
+                            <img class="pic" src="resources/nfc-tags/iphone-screen-3.svg" alt="iphone-screen-3"/>
+                        </div>
+                    </section>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <img height="50%" src="resources/nfc-tags/iphone-screen-4a.svg" alt="iphone-screen-4"/>
+                </td>
+            </tr>
+
+            
+            <!-- ------------------ Video link ------------------------->
+            <tr>
+                <td></td>
+                <td colspan="2" align="center" height="60px">
+                    <br><span class=bolded>Refer the video linked below for the full step-by-step automation setup in Home Assistant</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/PHr-JyMGsTc">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>

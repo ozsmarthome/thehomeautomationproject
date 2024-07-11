@@ -1,0 +1,13 @@
+alias: "NFC: From webhook"
+description: ""
+trigger:
+  - platform: event
+    event_type: office_nfc_tag
+condition: []
+action:
+  - service: light.toggle
+    metadata: {}
+    data: {}
+    target:
+      device_id: z5d19fd60e2e2f9a81c92db7f123456
+mode: single
