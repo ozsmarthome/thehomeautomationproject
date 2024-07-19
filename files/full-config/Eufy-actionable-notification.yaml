@@ -1,0 +1,64 @@
+alias: >-
+  EUFY: Actionable notification for mobile
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.doorbell_motion_detected
+      - binary_sensor.doorbell_person_detected
+    to: "on"
+    id: sensor
+  - platform: event
+    event_type: mobile_app_notification_action
+    id: snooze
+    event_data:
+      action: SNOOZE
+  - platform: event
+    event_type: mobile_app_notification_action
+    id: alarm
+    event_data:
+      action: ALARM
+condition: []
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: sensor
+        sequence:
+          - delay:
+              hours: 0
+              minutes: 0
+              seconds: 3
+              milliseconds: 0
+          - service: notify.mobile_app_vivo_1805
+            data:
+              message: Motion detected
+              data:
+                image: /api/image_proxy/image.doorbell_event_image
+                actions:
+                  - action: ALARM
+                    title: Alarm
+                  - action: SNOOZE
+                    title: Snooze
+      - conditions:
+          - condition: trigger
+            id: snooze
+        sequence:
+          - service: eufy_security.snooze
+            data:
+              snooze_time: 10
+              snooze_chime: false
+              snooze_motion: true
+              snooze_homebase: false
+            target:
+              entity_id: camera.doorbell
+      - conditions:
+          - condition: trigger
+            id: alarm
+        sequence:
+          - service: eufy_security.trigger_camera_alarm_with_duration
+            data:
+              duration: 1
+            target:
+              entity_id: camera.doorbell
+mode: single  

@@ -1,0 +1,35 @@
+alias: "EUFY: View Front door camera on person motion detected in doorbell"
+description: ""
+trigger:
+  - type: motion
+    platform: device
+    device_id: your_eufy_doorbell_device_id
+    entity_id: your_eufy_doorbell_entity_id
+    domain: binary_sensor
+condition: []
+action:
+  - service: camera.turn_on
+    target:
+      device_id: your_eufy_doorbell_device_id
+    data: {}
+    enabled: true
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 2
+      milliseconds: 0
+    enabled: true
+  - service: browser_mod.popup
+    data:
+      dismissable: true
+      autoclose: false
+      title: Front door
+      size: fullscreen
+      timeout: 30000
+      browser_id:
+        - iMac-safari
+      content:
+        type: custom:webrtc-camera
+        entity: camera.doorbell
+    enabled: true
+mode: single

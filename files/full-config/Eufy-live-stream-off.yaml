@@ -1,0 +1,19 @@
+alias: "EUFY: When motion detection stops turn OFF camera"
+description: ""
+trigger:
+  - type: no_motion
+    platform: device
+    device_id: your_eufy_doorbell_device_id
+    entity_id: your_eufy_doorbell_entity_id
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 30
+condition: []
+action:
+  - service: camera.turn_off
+    target:
+      device_id: your_eufy_doorbell_device_id
+    data: {}
+mode: single

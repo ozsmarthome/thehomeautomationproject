@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/banner-grid.css">
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <!-- <table width="100%">
+            <tr>
+                <td>
+                    
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr>
+        </table> -->
+        <!-- END Heading table -->
+
+        <table width="100%">
+             <!-- The CSS grid that makes up the entirety of the hero image/banner image area -->
+        <section class="top-banner-section">
+            <!-- The CSS grid area that displays the image (layer 1) -->
+            <div class="banner-image-div">
+                <img class="banner-image" src="resources/Banner-Small-white.svg" alt="Banner Image" />
+            </div>
+            <div class="banner-overlay-div"></div>
+        </section>
+
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td width="10px">
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+            </tr>
+            <!-- <tr>
+                <td colspan="2">
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr> -->
+
+
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    <br>
+                    <span class="italica">The below code snippets will help you setup your Eufy Video Doorbell in Home Assistant.</span>
+                    <br><br>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <hr>
+                    <span class="bolded">Here are the links to the third party components required for this project:</span>
+                    <br><br>
+                    <p><span class="bolded">Add-ons:</span></p>
+                    <li>Eufy security WS: <a href=https://github.com/bropat/hassio-eufy-security-ws>https://github.com/bropat/hassio-eufy-security-ws</a></li>
+                    <li>Go2RTC add on: <a href=https://github.com/AlexxIT/hassio-addons>https://github.com/AlexxIT/hassio-addons</a></li>
+                    <br>
+                    <p><span class="bolded">HACS components:</span></p>
+                    <li>WebRTC camera HACS: <a href=https://github.com/fuatakgun/WebRTC>https://github.com/fuatakgun/WebRTC</a></li>
+                    <li>Browser mod: <a href=https://github.com/thomasloven/hass-browser_mod>https://github.com/thomasloven/hass-browser_mod</a>
+                    </li>
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                    <hr>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for a simple automation for <code>actionable notification</code> in your mobile on person detection in Eufy doorbell:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('actionable-notification-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/Eufy-actionable-notification.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="actionable-notification-code">
+                        <pre><code>
+                          alias: >-
+                            EUFY: Actionable notification for mobile
+                          description: ""
+                          trigger:
+                            - platform: state
+                              entity_id:
+                                - binary_sensor.doorbell_motion_detected
+                                - binary_sensor.doorbell_person_detected
+                              to: "on"
+                              id: sensor
+                            - platform: event
+                              event_type: mobile_app_notification_action
+                              id: snooze
+                              event_data:
+                                action: SNOOZE
+                            - platform: event
+                              event_type: mobile_app_notification_action
+                              id: alarm
+                              event_data:
+                                action: ALARM
+                          condition: []
+                          action:
+                            - choose:
+                                - conditions:
+                                    - condition: trigger
+                                      id: sensor
+                                  sequence:
+                                    - delay:
+                                        hours: 0
+                                        minutes: 0
+                                        seconds: 3
+                                        milliseconds: 0
+                                    - service: notify.mobile_app_vivo_1805
+                                      data:
+                                        message: Motion detected
+                                        data:
+                                          image: /api/image_proxy/image.doorbell_event_image
+                                          actions:
+                                            - action: ALARM
+                                              title: Alarm
+                                            - action: SNOOZE
+                                              title: Snooze
+                                - conditions:
+                                    - condition: trigger
+                                      id: snooze
+                                  sequence:
+                                    - service: eufy_security.snooze
+                                      data:
+                                        snooze_time: 10
+                                        snooze_chime: false
+                                        snooze_motion: true
+                                        snooze_homebase: false
+                                      target:
+                                        entity_id: camera.doorbell
+                                - conditions:
+                                    - condition: trigger
+                                      id: alarm
+                                  sequence:
+                                    - service: eufy_security.trigger_camera_alarm_with_duration
+                                      data:
+                                        duration: 1
+                                      target:
+                                        entity_id: camera.doorbell
+                          mode: single                        
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+        
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Eufy App setup</span>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following Eufy support page explains how to setup a secondary account for family members:
+                    <br>
+                    <li><a href="https://support.eufy.com/s/article/Share-Your-eufySecurity-Devices-With-Your-Family">Share Your eufySecurity Devices With Your Family</a>
+                    </li><br>
+                    Use this option to setup login for your Home assistant Eufy add on
+                </td>
+            </tr>
+        
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Custom WebRTC card</span>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for the <code>custom WebRTC card</code> with condition:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('custom-card')">Copy</button>
+                </td>
+            </tr>
+
+            <!-- <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/esp32-full-config.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr> -->
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="custom-card">
+                        <pre><code>
+                            type: conditional
+                            conditions:
+                            - condition: state
+                                entity: input_boolean.doorbell_viewing
+                                state: 'on'
+                            card:
+                            type: custom:webrtc-camera
+                            entity: camera.doorbell
+                            ui: true
+                            shortcuts:
+                                - name: Play
+                                icon: mdi:play
+                                service: camera.turn_on
+                                service_data:
+                                    entity_id: camera.doorbell
+                                - name: Stop
+                                icon: mdi:stop
+                                service: camera.turn_off
+                                service_data:
+                                    entity_id: camera.doorbell                     
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td><br>
+                    The following automations are for setting the above card condition by input helper state:
+                    <br>
+                </td>
+                <td align="right">
+                    <br>
+                    <button class="copy-button" onClick="CopyToClipboard('input-helper-on')">Copy</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="input-helper-on">
+                        <pre><code>
+                            alias: "EUFY: doorbell viewing ON"
+                            description: ""
+                            trigger:
+                            - platform: state
+                                entity_id:
+                                - camera.doorbell
+                                to: streaming
+                                for:
+                                hours: 0
+                                minutes: 0
+                                seconds: 2
+                            condition: []
+                            action:
+                            - service: input_boolean.turn_on
+                                metadata: {}
+                                data: {}
+                                target:
+                                entity_id: input_boolean.doorbell_viewing
+                            mode: single               
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('input-helper-off')">Copy</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="input-helper-off">
+                        <pre><code>
+                            alias: "EUFY: doorbell viewing OFF"
+                            description: ""
+                            trigger:
+                            - platform: state
+                                entity_id:
+                                - camera.doorbell
+                                to: idle
+                                for:
+                                hours: 0
+                                minutes: 0
+                                seconds: 0
+                            condition: []
+                            action:
+                            - service: input_boolean.turn_off
+                                target:
+                                entity_id:
+                                    - input_boolean.doorbell_viewing
+                                data: {}
+                            mode: single                  
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Automation for configuring Live streaming on dashboard and popup</span>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for the person detection trigerred live stream to be switched ON:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('live-stream-on')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/Eufy-live-stream-on.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="live-stream-on">
+                        <pre><code>
+                            alias: "EUFY: View Front door camera on person motion detected in doorbell"
+                            description: ""
+                            trigger:
+                            - type: motion
+                                platform: device
+                                device_id: your_eufy_doorbell_device_id
+                                entity_id: your_eufy_doorbell_entity_id
+                                domain: binary_sensor
+                            condition: []
+                            action:
+                            - service: camera.turn_on
+                                target:
+                                device_id: your_eufy_doorbell_device_id
+                                data: {}
+                                enabled: true
+                            - delay:
+                                hours: 0
+                                minutes: 0
+                                seconds: 2
+                                milliseconds: 0
+                                enabled: true
+                            - service: browser_mod.popup
+                                data:
+                                dismissable: true
+                                autoclose: false
+                                title: Front door
+                                size: fullscreen
+                                timeout: 30000
+                                browser_id:
+                                    - iMac-safari
+                                content:
+                                    type: custom:webrtc-camera
+                                    entity: camera.doorbell
+                                enabled: true
+                            mode: single                   
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    <br>
+                    Here is a sample code for the person detection trigerred live stream to be switched OFF:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <br>
+                    <button class="copy-button" onClick="CopyToClipboard('live-stream-off')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/Eufy-live-stream-off.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="live-stream-off">
+                        <pre><code>
+                            alias: "EUFY: When motion detection stops turn OFF camera"
+                            description: ""
+                            trigger:
+                            - type: no_motion
+                                platform: device
+                                device_id: your_eufy_doorbell_device_id
+                                entity_id: your_eufy_doorbell_entity_id
+                                domain: binary_sensor
+                                for:
+                                hours: 0
+                                minutes: 0
+                                seconds: 30
+                            condition: []
+                            action:
+                            - service: camera.turn_off
+                                target:
+                                device_id: your_eufy_doorbell_device_id
+                                data: {}
+                            mode: single               
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br><span class="bolded">************* Refer the video linked below for full step-by-step configuration *************</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/NY79GxJilO0">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>
