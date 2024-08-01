@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/banner-grid.css">
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+        <!-- Heading table -->
+        <!-- <table width="100%">
+            <tr>
+                <td>
+                    
+                </td>
+                <td></td>
+                <td>
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" width="50px">
+                    <div style="margin-top:-25px">
+                        
+                    </div>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr>
+        </table> -->
+        <!-- END Heading table -->
+
+        <table width="100%">
+             <!-- The CSS grid that makes up the entirety of the hero image/banner image area -->
+        <section class="top-banner-section">
+            <!-- The CSS grid area that displays the image (layer 1) -->
+            <div class="banner-image-div">
+                <img class="banner-image" src="resources/Banner-Small-white.svg" alt="Banner Image" />
+            </div>
+            <div class="banner-overlay-div"></div>
+        </section>
+
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td width="10px">
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+            </tr>
+            <!-- <tr>
+                <td colspan="2">
+                    <h1>The Home Automation Project</h1>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"><hr class="gradient"></td>
+            </tr> -->
+
+
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    <br>
+                    <span class="italica">The below instructions will help you setup Local control of Tuya Wifi and BLE devices in Home Assistant.</span>
+                    <br><br>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <hr>
+                    <span class="bolded">Here are the links to the third party components required for this project:</span>
+                    <br><br>
+                    <p><span class="bolded">HACS components:</span></p>
+                    <li>Local Tuya: <a href=https://github.com/rospogrigio/localtuya>https://github.com/rospogrigio/localtuya</a></li>
+                    <li>Tuya CLI: <a href=https://github.com/TuyaAPI/cli>https://github.com/TuyaAPI/cli</a></li>
+                    <li>Tuya BLE: <a href=https://github.com/markusg1234/ha_tuya_ble>https://github.com/markusg1234/ha_tuya_ble</a></li>
+                    <br>
+                    <p><span class="bolded">Links to useful resources:</span></p>
+                    <li>Install Tuya CLI in Windows: <a href=https://www.reddit.com/r/homeassistant/comments/oglpgc/absolute_beginners_guide_to_setting_up_local_tuya>Beginners guide to setting up local tuya in windows pc</a></li>
+                    <li>Tuya developer platform: <a href=https://auth.tuya.com/?from=https%3A%2F%2Fdeveloper.tuya.com%3Fredirect%3Dhttps%3A%2F%2Fplatform.tuya.com>Tuya Developer Platform</a>
+                    </li>
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                    <hr>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <br>
+                    <span class="bolded">Here are the steps to install Local Tuya:</span>
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td colspan="2" style="padding-left:30px">
+                    <ol>
+                    <li>Install HACS custom repo Local Tuya<br>
+                        Ensure devices in either Smart Life or Tuya app</li>
+
+                    <li>Login / Sign up to Tuya Cloud developer account. Navigate to Cloud -> develop -> Project -> Create New Project
+                        <br>Ensure to add Authorize and IOT APIs (should be suggested by default)</li>
+
+                    <li>Link app account (Tuya / Smart Life mobile app) using QR code</li>
+
+                    <li>Get UID, Client Id and secret</li>
+	                
+                    <li>Set up integration in HA - enter Cloud account details (OPTIONAL step but recommended)</li>
+
+                    <li>Device discovery (auto - recommended)</li>
+
+                    <li>Open Tuya / SL app to check MAC address of wifi device</li>
+
+                    <li>Find IP address in router page - assign static IP</li>
+                    
+                    <li>Enter the IP (host), device id, local key</li>
+                    
+                    <li>Submit (if DPS entry is required, then follow below steps)</li>
+
+                    </ol><br>
+
+                <span class="italica">For DPS Id confirmation:</span>
+                    
+                    <li>Log into Tuya developer portal and navigate to Cloud -> API explorer -> Device Control -> Querry Properties</li>
+
+                    <li>Enter device ID and Submit</li>
+
+                    <li>Note DP Id for required properties</li>
+
+                    <li>Enter comma separated DPS Id in HA integration setup</li>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <br>
+                    Here are the steps (in Mac / Linux) to install Tuya CLI for manual local Tuya device discovery:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container-small" id="live-stream-off">
+                        <pre><code>
+                            $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+                            $ brew install nvm
+                            $ echo "source $(brew --prefix nvm)/nvm.sh" >> ~/.profile
+                            $ nvm install node
+                            $ npm i @tuyapi/cli -g
+                            $ tuya-cli wizard       
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <br>
+                    <span class="bolded">Here are the steps to install Tuya BLE:</span>
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td colspan="2" style="padding-left:30px">
+                    <ol>
+                    <li>Unlink any device not supported from Cloud Project - example curtain!<br>
+                        Note: this means for every new device need to add to project for HA automation</li>
+
+                    <li>Unlink the BLE device from wireless gateway before proceeding</li>
+
+                    <li>Setup bluetooth in config.yaml (assumed adapter present in PI) else bluetooth dongle or esp32 and BLE proxy</li>
+
+                    <li>Install HACS custom repo Tuya  BLE</li>
+	                
+                    <li>Enter cloud account details<br>
+                        User account - email - as per Tuya / SL app<br>
+                        password - as per Tuya / Smart Life app</li>
+                    
+                    <li>CLose the Tuya / Smart Life mobile app</li>
+
+                    <li>Device discovery (auto)</li>
+
+                </td>
+            </tr>
+            
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br><span class="bolded">************* Refer the video linked below for full step-by-step configuration *************</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/R_8uypFHKTs">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>
