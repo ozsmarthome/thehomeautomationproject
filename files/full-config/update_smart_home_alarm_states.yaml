@@ -1,0 +1,61 @@
+alias: "ALARM: Update smart home alarm state when Homebase state changes"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - alarm_control_panel.homebase
+    to: null
+conditions: []
+actions:
+  - if:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.homebase
+            state: armed_home
+          - condition: template
+            value_template: >-
+              {% if not is_state('alarm_control_panel.smart_alarm',
+              'armed_home') %}true{% endif %}
+    then:
+      - action: alarm_control_panel.alarm_arm_home
+        metadata: {}
+        data: {}
+        target:
+          entity_id: alarm_control_panel.smart_alarm
+  - if:
+      - condition: and
+        conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: alarm_control_panel.homebase
+                state: disarmed
+              - condition: state
+                entity_id: alarm_control_panel.homebase
+                state: "Off"
+          - condition: template
+            value_template: >-
+              {% if not is_state('alarm_control_panel.smart_alarm', 'disarmed')
+              %}true{% endif %}
+    then:
+      - action: script.turn_on
+        target:
+          entity_id: script.disarm_smart_home_alarm
+        data: {}
+  - if:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.homebase
+            state: triggered
+          - condition: template
+            value_template: >-
+              {% if not is_state('alarm_control_panel.smart_alarm', 'triggered')
+              %}true{% endif %}
+    then:
+      - action: alarm_control_panel.alarm_trigger
+        data: {}
+        target:
+          entity_id: alarm_control_panel.home_alarm
+mode: single

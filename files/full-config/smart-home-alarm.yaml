@@ -1,0 +1,127 @@
+- platform: manual
+  name: Home Alarm #This is the standard alarm which does not check for sensors
+  code: !secret alarm_code
+  code_arm_required: false
+  arming_time: 0 #The time of the 'arming' state before effecting a state change
+  delay_time: 0 #The time of the 'pending' state before triggering the alarm
+  trigger_time: 120 #The time of the 'triggered' state in which the alarm is firing
+  disarm_after_trigger: false
+  #remember to update custom sensors for times below for keypad
+  #alarm_control_panel_arming_time
+  #alarm_control_panel_pending_delay_time
+  disarmed:
+    trigger_time: 0
+  armed_home:
+    arming_time: 30 #exit delay, wait before arming - 0 in homebase
+    delay_time: 0 #entry delay, wait before triggering - 0 in homebase
+  armed_away:
+    arming_time: 120 #sensor.alarm_control_panel_pending_delay_time ##exit delay, wait before arming - 0 in homebase
+    delay_time: 120 #entry delay, wait before triggering - 0 in homebase
+  armed_night:
+    arming_time: 0
+    delay_time: 0
+
+- platform: template
+  panels:
+    # This is the SMART alarm that checks that doors are closed before arming.
+    smart_alarm:
+      name: Smart Home Alarm
+      value_template: "{{ states('alarm_control_panel.home_alarm') }}"
+      code_arm_required: false
+
+      arm_home: #Day Alarm
+        - choose:
+            - conditions:
+                - condition: and
+                  conditions:
+                    # If doors are closed
+                    - condition: state
+                      entity_id: binary_sensor.alarm_door_sensors
+                      state: "off"
+                    # If doors are locked
+                    # - condition: state
+                    #   entity_id: lock.alarm_door_locks
+                    #   state: "locked"
+              sequence:
+                - action: alarm_control_panel.alarm_arm_home
+                  target:
+                    entity_id: alarm_control_panel.home_alarm
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 30
+                    milliseconds: 0
+                - action: alarm_control_panel.alarm_arm_home
+                  target:
+                    entity_id: alarm_control_panel.homebase
+          default:
+            - action: automation.trigger # Else, Alexa says that some accesses are left open.
+              target:
+                entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+
+      arm_away: #Away Alarm
+        - choose:
+            - conditions:
+                - condition: and
+                  conditions:
+                    # If doors are closed
+                    - condition: state
+                      entity_id: binary_sensor.alarm_door_sensors
+                      state: "off"
+                    # If doors are locked
+                    # - condition: state
+                    #   entity_id: lock.alarm_door_locks
+                    #   state: "locked"
+              sequence:
+                - action: alarm_control_panel.alarm_arm_away
+                  target:
+                    entity_id: alarm_control_panel.home_alarm
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 120
+                    milliseconds: 0
+                - action: alarm_control_panel.alarm_arm_away
+                  target:
+                    entity_id: alarm_control_panel.homebase
+          default:
+            - action: automation.trigger # Else, Alexa says that some accesses are left open.
+              target:
+                entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+
+      arm_night: #Night Alarm
+        - choose:
+            - conditions:
+                - condition: and
+                  conditions:
+                    # If doors are closed
+                    - condition: state
+                      entity_id: binary_sensor.alarm_door_sensors
+                      state: "off"
+                    # If doors are locked
+                    # - condition: state
+                    #   entity_id: lock.alarm_door_locks
+                    #   state: "locked"
+              sequence:
+                - action: alarm_control_panel.alarm_arm_night
+                  target:
+                    entity_id: alarm_control_panel.home_alarm
+                - action: alarm_control_panel.alarm_arm_night
+                  target:
+                    entity_id: alarm_control_panel.homebase
+          default:
+            - action: automation.trigger # Else, Alexa says that some accesses are left open.
+              target:
+                entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+
+      disarm:
+        - condition: template
+          value_template: !secret alarm_code_evaluator #pass the check as a secret to not expose the alarm code!
+        - action: alarm_control_panel.alarm_disarm
+          target:
+            entity_id: alarm_control_panel.homebase
+        - action: alarm_control_panel.alarm_disarm
+          target:
+            entity_id: alarm_control_panel.home_alarm
+          data:
+            code: !secret alarm_code

@@ -1,0 +1,48 @@
+alias: "ALARM: Trigger Homebase alarm when door opens while ARMED"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - binary_sensor.alarm_door_sensors
+    from: "off"
+    to: "on"
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  - trigger: state
+    entity_id:
+      - alarm_control_panel.homebase
+    to: triggered
+conditions:
+  - condition: or
+    conditions:
+      - condition: state
+        entity_id: alarm_control_panel.smart_alarm
+        state: armed_home
+      - condition: state
+        entity_id: alarm_control_panel.smart_alarm
+        state: armed_away
+      - condition: state
+        entity_id: alarm_control_panel.smart_alarm
+        state: armed_night
+actions:
+  - action: alarm_control_panel.alarm_trigger
+    metadata: {}
+    data: {}
+    enabled: true
+    target:
+      entity_id: alarm_control_panel.home_alarm
+  - if:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.homebase
+            state: triggered
+    then:
+      - action: alarm_control_panel.alarm_trigger
+        metadata: {}
+        data: {}
+        target:
+          entity_id: alarm_control_panel.homebase
+mode: single

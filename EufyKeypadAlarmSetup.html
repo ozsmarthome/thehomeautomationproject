@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles/banner-grid.css">
+        <link rel="stylesheet" href="styles/my-styles.css">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/default.min.css"/> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github-dark.css"/> -->
+        <link rel="stylesheet" href="styles/highlight-theme.css">
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js"></script>
+        <!-- and it's easy to individually load additional languages -->
+        <script src="https://unpkg.com/@highlightjs/cdn-assets@11.7.0/languages/javascript.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <script>
+            function CopyToClipboard (containerid) {
+                // Create a new textarea element and give it id='temp_element'
+                const textarea = document.createElement('textarea')
+                textarea.id = 'temp_element'
+                // Optional step to make less noise on the page, if any!
+                textarea.style.height = 0
+                // Now append it to your page somewhere, I chose <body>
+                document.body.appendChild(textarea)
+                // Give our textarea a value of whatever inside the div of id=containerid
+                textarea.value = document.getElementById(containerid).innerText
+                // Now copy whatever inside the textarea to clipboard
+                const selector = document.querySelector('#temp_element')
+                selector.select()
+                document.execCommand('copy')
+                // Remove the textarea
+                document.body.removeChild(textarea)
+                alert('Copied to clipboard!')
+            }
+        </script>
+      </head>
+    <body>
+
+        <table width="100%">
+             <!-- The CSS grid that makes up the entirety of the hero image/banner image area -->
+        <section class="top-banner-section">
+            <!-- The CSS grid area that displays the image (layer 1) -->
+            <div class="banner-image-div">
+                <img class="banner-image" src="resources/Banner-Small-white.svg" alt="Banner Image" />
+            </div>
+            <div class="banner-overlay-div"></div>
+        </section>
+
+        <!-- Heading table -->
+        <table width="100%">
+            <tr>
+                <td width="10px">
+                    <!-- <a href="index.html"><img height="50px" src="icon-pack/home-button-icon.png" alt="Home" /></a> -->
+                </td>
+                <td></td>
+            </tr>
+
+
+            <tr><td width="30px"></td>
+                <td colspan="2">
+                    <br>
+                    <span class="italica">The below code snippets will help you setup your Eufy Keypad with a smart alarm in Home Assistant.</span>
+                    <br><br>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td colspan="2">
+                    <hr>
+                    <span class="bolded">Here are the links to some important resources for this project:</span>
+                    <br><br>
+                    <!-- <p><span class="bolded">Add-ons:</span></p> -->
+                    <li>HA Alarm panel card: <a href=https://www.home-assistant.io/dashboards/alarm-panel/>https://www.home-assistant.io/dashboards/alarm-panel/</a></li>
+                    <li>Eufy security WS: <a href=https://github.com/bropat/hassio-eufy-security-ws>https://github.com/bropat/hassio-eufy-security-ws</a></li>
+                    <li>HA Manual Alarm control panel: <a href=https://www.home-assistant.io/integrations/manual/>https://www.home-assistant.io/integrations/manual/</a></li>
+                    <li>Template binary sensors in HA: <a href=https://www.home-assistant.io/integrations/template/#state-based-template-binary-sensors-buttons-images-numbers-selects-and-sensors>https://www.home-assistant.io/integrations/template/#state-based-template-binary-sensors-buttons-images-numbers-selects-and-sensors</a></li>
+                    <li>HA Scripts: <a href=https://www.home-assistant.io/integrations/script/>https://www.home-assistant.io/integrations/script/</a></li>
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                    <hr>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Eufy App setup</span>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following Eufy support page explains how to setup a keypad with Homebase:
+                    <br>
+                    <li><a href="https://support.eufy.com/s/article/Setting-Up-Your-Keypad-in-eufySecurity-App">Setting Up Your Keypad in eufySecurity App</a>
+                    </li>
+                    Use this option to setup the access code and custom option mapping for the Keypoad
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Update HA configuration file</span>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following lines need to be added in configuration.yaml file of home assistant:
+                    <br>
+                    <pre><code>alarm_control_panel: !include my_alarm_control_panel.yaml</code></pre>
+                    Ensure the name and path of the yaml file matches your setup
+                </td>
+            </tr>
+
+            <tr><td></td>
+                <td>
+                    <br>The following lines need to be added in secrets.yaml file of home assistant:
+                    <br>
+                    <pre><code>
+                        alarm_code: 1234
+                        alarm_code_evaluator: "{{ code == '1234' }}"
+                    </code></pre>
+                    Ensure the value '1234' is replaced by the access code for your Eufy keypad
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Binary sensors for alarm trigger</span>
+                </td>
+            </tr>
+            <tr><td></td>
+                <td>
+                    <br>The following is an example of the binary sensor to be added in your template sensors yaml file of home assistant:
+                    <br>
+                    <pre><code>
+                        - binary_sensor:
+                            - name: Alarm_Door_Sensors
+                            unique_id: "alarm_door_sensors"
+                            state: >-
+                                {% if is_state('binary_sensor.d_link_dch_b112_opening', 'on' ) %}
+                                on
+                                {% else %}
+                                off
+                                {% endif %}
+                            attributes:
+                                attribute: "{{ now().minute }}"
+                    </code></pre>
+                    Ensure the name of the sensor matches matches your setup
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Manual Smart Home Alarm config</span>
+                </td>
+            </tr>
+            <tr><td>
+                </td>
+                <td>
+                    Here is the sample yaml for <code>Smart Home Alarm</code> Eufy keypad:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+                <td align="right">
+                    <button class="copy-button" onClick="CopyToClipboard('smart-alarm-code')">Copy</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/smart-home-alarm.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="smart-alarm-code">
+                        <pre><code>
+                            - platform: manual
+                            name: Home Alarm #This is the standard alarm which does not check for sensors
+                            code: !secret alarm_code
+                            code_arm_required: false
+                            arming_time: 0 #The time of the 'arming' state before effecting a state change
+                            delay_time: 0 #The time of the 'pending' state before triggering the alarm
+                            trigger_time: 120 #The time of the 'triggered' state in which the alarm is firing
+                            disarm_after_trigger: false
+                            #remember to update custom sensors for times below for keypad
+                            #alarm_control_panel_arming_time
+                            #alarm_control_panel_pending_delay_time
+                            disarmed:
+                              trigger_time: 0
+                            armed_home:
+                              arming_time: 30 #exit delay, wait before arming - 0 in homebase
+                              delay_time: 0 #entry delay, wait before triggering - 0 in homebase
+                            armed_away:
+                              arming_time: 120 #sensor.alarm_control_panel_pending_delay_time ##exit delay, wait before arming - 0 in homebase
+                              delay_time: 120 #entry delay, wait before triggering - 0 in homebase
+                            armed_night:
+                              arming_time: 0
+                              delay_time: 0
+                          
+                          - platform: template
+                            panels:
+                              # This is the SMART alarm that checks that doors are closed before arming.
+                              smart_alarm:
+                                name: Smart Home Alarm
+                                value_template: "{{ states('alarm_control_panel.home_alarm') }}"
+                                code_arm_required: false
+                          
+                                arm_home: #Day Alarm
+                                  - choose:
+                                      - conditions:
+                                          - condition: and
+                                            conditions:
+                                              # If doors are closed
+                                              - condition: state
+                                                entity_id: binary_sensor.alarm_door_sensors
+                                                state: "off"
+                                              # If doors are locked
+                                              # - condition: state
+                                              #   entity_id: lock.alarm_door_locks
+                                              #   state: "locked"
+                                        sequence:
+                                          - action: alarm_control_panel.alarm_arm_home
+                                            target:
+                                              entity_id: alarm_control_panel.home_alarm
+                                          - delay:
+                                              hours: 0
+                                              minutes: 0
+                                              seconds: 30
+                                              milliseconds: 0
+                                          - action: alarm_control_panel.alarm_arm_home
+                                            target:
+                                              entity_id: alarm_control_panel.homebase
+                                    default:
+                                      - action: automation.trigger # Else, Alexa says that some accesses are left open.
+                                        target:
+                                          entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+                          
+                                arm_away: #Away Alarm
+                                  - choose:
+                                      - conditions:
+                                          - condition: and
+                                            conditions:
+                                              # If doors are closed
+                                              - condition: state
+                                                entity_id: binary_sensor.alarm_door_sensors
+                                                state: "off"
+                                              # If doors are locked
+                                              # - condition: state
+                                              #   entity_id: lock.alarm_door_locks
+                                              #   state: "locked"
+                                        sequence:
+                                          - action: alarm_control_panel.alarm_arm_away
+                                            target:
+                                              entity_id: alarm_control_panel.home_alarm
+                                          - delay:
+                                              hours: 0
+                                              minutes: 0
+                                              seconds: 120
+                                              milliseconds: 0
+                                          - action: alarm_control_panel.alarm_arm_away
+                                            target:
+                                              entity_id: alarm_control_panel.homebase
+                                    default:
+                                      - action: automation.trigger # Else, Alexa says that some accesses are left open.
+                                        target:
+                                          entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+                          
+                                arm_night: #Night Alarm
+                                  - choose:
+                                      - conditions:
+                                          - condition: and
+                                            conditions:
+                                              # If doors are closed
+                                              - condition: state
+                                                entity_id: binary_sensor.alarm_door_sensors
+                                                state: "off"
+                                              # If doors are locked
+                                              # - condition: state
+                                              #   entity_id: lock.alarm_door_locks
+                                              #   state: "locked"
+                                        sequence:
+                                          - action: alarm_control_panel.alarm_arm_night
+                                            target:
+                                              entity_id: alarm_control_panel.home_alarm
+                                          - action: alarm_control_panel.alarm_arm_night
+                                            target:
+                                              entity_id: alarm_control_panel.homebase
+                                    default:
+                                      - action: automation.trigger # Else, Alexa says that some accesses are left open.
+                                        target:
+                                          entity_id: automation.tts_notify_unable_to_arm_smart_home_alarm
+                          
+                                disarm:
+                                  - condition: template
+                                    value_template: !secret alarm_code_evaluator #pass the check as a secret to not expose the alarm code!
+                                  - action: alarm_control_panel.alarm_disarm
+                                    target:
+                                      entity_id: alarm_control_panel.homebase
+                                  - action: alarm_control_panel.alarm_disarm
+                                    target:
+                                      entity_id: alarm_control_panel.home_alarm
+                                    data:
+                                      code: !secret alarm_code                                                  
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+        
+            
+        
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Custom script to disarm smart alarm</span>
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td>
+                    Here is a sample code for the <code>disarm_smart_home_alarm</code> script:
+                    <!-- <span class="bolded">Here is a sample code for a simple / basic config of <code>frigate.yaml</code>:</span> -->
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <!-- <div class="code-container" id="smart-home-alarm-script"> -->
+                        <pre><code>
+                            disarm_smart_home_alarm:
+                            sequence:
+                                - action: alarm_control_panel.alarm_disarm
+                                target:
+                                    entity_id: alarm_control_panel.home_alarm
+                                data:
+                                    code: !secret alarm_code                 
+                        </code></pre>
+                    <!-- </div> -->
+                </td>
+            </tr>
+
+            <tr><td>
+                </td>
+                <td colspan="2" height="30px">
+                    <span class="topic-heading"><br>Automations</span>
+                </td>
+            </tr>
+
+            <!-- ------------------- Automation 1 ---------------------------- -->
+            <tr>
+                <td>
+                </td>
+                <td><br>
+                    The following automation is for setting the Smart home alarm state based on Homebase state changes:
+                    <br>
+                </td>
+                <td align="right">
+                    <br>
+                    <button class="copy-button" onClick="CopyToClipboard('smart-home-alarm-states')">Copy</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/update_smart_home_alarm_states.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="smart-home-alarm-states">
+                        <pre><code>
+                            alias: "ALARM: Update smart home alarm state when Homebase state changes"
+                            description: ""
+                            triggers:
+                            - trigger: state
+                                entity_id:
+                                - alarm_control_panel.homebase
+                                to: null
+                            conditions: []
+                            actions:
+                            - if:
+                                - condition: and
+                                    conditions:
+                                    - condition: state
+                                        entity_id: alarm_control_panel.homebase
+                                        state: armed_home
+                                    - condition: template
+                                        value_template: >-
+                                        {% if not is_state('alarm_control_panel.smart_alarm',
+                                        'armed_home') %}true{% endif %}
+                                then:
+                                - action: alarm_control_panel.alarm_arm_home
+                                    metadata: {}
+                                    data: {}
+                                    target:
+                                    entity_id: alarm_control_panel.smart_alarm
+                            - if:
+                                - condition: and
+                                    conditions:
+                                    - condition: or
+                                        conditions:
+                                        - condition: state
+                                            entity_id: alarm_control_panel.homebase
+                                            state: disarmed
+                                        - condition: state
+                                            entity_id: alarm_control_panel.homebase
+                                            state: "Off"
+                                    - condition: template
+                                        value_template: >-
+                                        {% if not is_state('alarm_control_panel.smart_alarm', 'disarmed')
+                                        %}true{% endif %}
+                                then:
+                                - action: script.turn_on
+                                    target:
+                                    entity_id: script.disarm_smart_home_alarm
+                                    data: {}
+                            - if:
+                                - condition: and
+                                    conditions:
+                                    - condition: state
+                                        entity_id: alarm_control_panel.homebase
+                                        state: triggered
+                                    - condition: template
+                                        value_template: >-
+                                        {% if not is_state('alarm_control_panel.smart_alarm', 'triggered')
+                                        %}true{% endif %}
+                                then:
+                                - action: alarm_control_panel.alarm_trigger
+                                    data: {}
+                                    target:
+                                    entity_id: alarm_control_panel.home_alarm
+                            mode: single            
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- ------------------- Automation 2 ---------------------------- -->
+            <tr>
+                <td>
+                </td>
+                <td><br>
+                    The following automation is for triggering the Smart home alarm state based on sensor state changes:
+                    <br>
+                </td>
+                <td align="right">
+                    <br>
+                    <button class="copy-button" onClick="CopyToClipboard('smart-home-trigger')">Copy</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>Link to download the sample yaml file: <a href="files/full-config/trigger_smart_home_alarm.yaml" download target="_blank">Click this link to download sample yaml file</a> </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div class="code-container" id="smart-home-trigger">
+                        <pre><code>
+                            alias: "ALARM: Trigger Homebase alarm when door opens while ARMED"
+                            description: ""
+                            triggers:
+                            - trigger: state
+                                entity_id:
+                                - binary_sensor.alarm_door_sensors
+                                from: "off"
+                                to: "on"
+                                for:
+                                hours: 0
+                                minutes: 0
+                                seconds: 0
+                            - trigger: state
+                                entity_id:
+                                - alarm_control_panel.homebase
+                                to: triggered
+                            conditions:
+                            - condition: or
+                                conditions:
+                                - condition: state
+                                    entity_id: alarm_control_panel.smart_alarm
+                                    state: armed_home
+                                - condition: state
+                                    entity_id: alarm_control_panel.smart_alarm
+                                    state: armed_away
+                                - condition: state
+                                    entity_id: alarm_control_panel.smart_alarm
+                                    state: armed_night
+                            actions:
+                            - action: alarm_control_panel.alarm_trigger
+                                metadata: {}
+                                data: {}
+                                enabled: true
+                                target:
+                                entity_id: alarm_control_panel.home_alarm
+                            - if:
+                                - condition: not
+                                    conditions:
+                                    - condition: state
+                                        entity_id: alarm_control_panel.homebase
+                                        state: triggered
+                                then:
+                                - action: alarm_control_panel.alarm_trigger
+                                    metadata: {}
+                                    data: {}
+                                    target:
+                                    entity_id: alarm_control_panel.homebase
+                            mode: single            
+                        </code></pre>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- ------------------- VIDEO LINKS ---------------------------- -->
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <br><span class="bolded">************* Refer the video linked below for full step-by-step configuration *************</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2" align="center">
+                    <iframe width="420" height="315"
+                        src="https://www.youtube.com/embed/">
+                    </iframe>
+                </td>
+            </tr>
+
+            <tr><td colspan="3"><br><br>
+                <!-- Add standard footer -->
+                <section class="contact-details">
+  
+                    <div class="contact-details-text">Contact me:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="mailto:the.homeautomationproject.oz@gmail.com">
+                            <img class="contact-details-icon-email" alt="Email"/>
+                        </a>
+                    </div>
+                    <div class="contact-details-separator">&#169; All Rights Reserved</div>
+                    <div class="contact-details-text">My channel:&nbsp;</div>
+                    <div class="contact-details-icons">
+                        <a href="https://www.youtube.com/channel/UCOEpoHmnYxqFgQ5bcg6EEcA"  target="_blank">
+                            <img class="contact-details-icon-channel" alt="Youtube"/>
+                        </a>
+                    </div>
+  
+                </section>
+                <!-- End standard footer -->
+                  </td>
+              </tr>
+
+        </table>
+         
+    </body>
+</html>
