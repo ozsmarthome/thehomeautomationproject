@@ -1,0 +1,35 @@
+alias: "EUFY: Notify when a face is matched on doorbell"
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - sensor.face_recog_matches
+conditions:
+  - condition: template
+    value_template: "{{ trigger.to_state.attributes.names | length > 0 }}"
+actions:
+  - action: notify.mobile_app_v2046
+    metadata: {}
+    data:
+      message: Someone is there!
+      title: Eufy Doorbell
+    enabled: false
+  - action: notify.mobile_app_v2046
+    metadata: {}
+    data_template:
+      message: |-
+        {% if 'Unknown' in trigger.to_state.attributes.names[0] %}
+          Someone is at the door
+        {% else %}
+          Hello {{trigger.to_state.attributes.names[0]}}!! I see you :)
+        {% endif %}
+      data:
+        image: >-
+          http://192.168.1.1:8123{{state_attr('image.doorbell_event_image','entity_picture')}}
+        actions:
+          - action: URI
+            title: View Image
+            uri: >-
+              http://192.168.1.1:8123{{state_attr('image.doorbell_event_image','entity_picture')}}
+    enabled: true
+mode: single

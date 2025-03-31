@@ -1,0 +1,26 @@
+alias: "EUFY-CAM: Publish doorbell image to mqtt"
+description: ""
+triggers:
+  - type: motion
+    device_id: yourdoorbelldeviceid
+    entity_id: yourdoorbellentityid
+    domain: binary_sensor
+    trigger: device
+conditions: []
+actions:
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 1
+      milliseconds: 0
+    enabled: true
+  - action: mqtt.publish
+    metadata: {}
+    data:
+      topic: doorbell/snapshot
+      payload: >-
+        {"image":"http://192.168.1.1:8123{{state_attr('image.doorbell_event_image','entity_picture')
+        }}"}
+      retain: true
+      evaluate_payload: false
+mode: single
