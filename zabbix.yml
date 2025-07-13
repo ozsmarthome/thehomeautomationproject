@@ -27,7 +27,7 @@ services:
       ZBX_HOUSEKEEPINGFREQUENCY: 1
       ZBX_MAXHOUSEKEEPERDELETE: 5000
       DB_SERVER_HOST: postgres-server
-      #ZBX_NODEADDRESS: zabbix-server #fixes the UI error server not running! Issue# ZBX-26625
+      ZBX_NODEADDRESS: zabbix-server #fixes the UI error server not running! Issue# ZBX-26625
     depends_on:
       - postgres-server
     volumes:  # Volumes for scripts and related files you can add
